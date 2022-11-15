@@ -1,65 +1,22 @@
 import express from "express"
-import { v4 as uuidv4 } from "uuid"
-uuidv4() // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+import { getUsers, createUser, getSingleUser, deleteUser, updateUser } from "../controllers/users.js"
 
 const router = express.Router()
 
-// const users = [
-//   {
-//     firstName: "John",
-//     lastName: "Doe",
-//     age: 49,
-//   },
-//   {
-//     firstName: "Jane",
-//     lastName: "Doe",
-//     age: 29,
-//   },
-//   {
-//     firstName: "Josh",
-//     lastName: "Doe",
-//     age: 49,
-//   },
-// ]
+// list all the users.
+router.get("/", getUsers)
 
-let users = []
+// Post a new user.
 
-router.get("/", (req, res) => {
-  console.log(users)
-  res.send("Hello from get")
-})
+router.post("/", createUser)
 
-router.post("/", (req, res) => {
-  const user = req.body
+// Get single user information.
+router.get("/:id", getSingleUser)
 
-  users.push({ ...user, id: uuidv4() })
-  console.log(req.body)
-  console.log("Post Route Reached")
-  res.send(`user with the name ${user.firstName} created!`)
-})
+// Delete a user.
+router.delete("/:id", deleteUser)
 
-//single
-router.get("/:id", (req, res) => {
-  // console.log(users)
-
-  const params = req.params
-  const { id } = params
-
-  const foundUser = users.find((user) => user.id === id)
-
-  res.send(foundUser)
-})
-
-// delete.
-router.delete("/:id", (req, res) => {
-  // console.log(users)
-
-  const params = req.params
-  const { id } = params
-
-  users = users.filter((user) => user.id !== id)
-
-  res.send(newUsers)
-})
+// Update a user.
+router.patch("/:id", updateUser)
 
 export default router
